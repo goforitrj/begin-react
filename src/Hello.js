@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-function Hello({ name, color, children }) {
+function Hello({ name, color, isSpecial, children }) {
     const style = {
         backgroundColor: "tomato",
         color: color,
@@ -15,7 +15,9 @@ function Hello({ name, color, children }) {
     return (
         <div>
             {/* Style object */}
-            <div style={{ color }}>Hello, {name}</div>
+            <div style={{ color }}>
+                {isSpecial && <b>*</b>}Hello, {name}
+            </div>
             <input onChange={onChange} value={text} />
             <b>값: {text}</b>
             {children}
@@ -25,7 +27,8 @@ function Hello({ name, color, children }) {
 
 Hello.defaultProps = {
     name: "none",
-    color: "purple"
+    color: "purple",
+    isSpecial: false
 };
 
 export default Hello;

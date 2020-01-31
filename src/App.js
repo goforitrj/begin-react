@@ -2,10 +2,12 @@ import React from "react";
 import Hello from "./Hello";
 import Info from "./Info";
 import InputSample from "./InputSample";
+import UserList from "./UserList";
 
 function App() {
     return (
         <div className="App">
+            <UserList />
             <InputSample />
             <hr />
             <Info />

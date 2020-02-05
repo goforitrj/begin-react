@@ -2,6 +2,11 @@ import React, { useRef, useState } from 'react';
 import UserList from './UserList';
 import CreateUser from './CreateUser';
 
+function countActiveUsers(users) {
+    console.log('counting');
+    return users.filter(user => user.active).length;
+}
+
 function App() {
     const [inputs, setInputs] = useState({
         username: '',
@@ -57,6 +62,8 @@ function App() {
     const onRemove = id => {
         setUsers(users.filter(user => user.id !== id));
     };
+
+    const count = countActiveUsers(users);
     return (
         <div className="App">
             <CreateUser
@@ -71,6 +78,7 @@ function App() {
                 onEdit={onEdit}
                 onToggle={onToggle}
             />
+            <div>현재 활성자 수 : {count}</div>
         </div>
     );
 }

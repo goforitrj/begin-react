@@ -1,9 +1,31 @@
-import React from 'react';
-function User({ user, onRemove, onEdit }) {
+import React, { useEffect } from 'react';
+function User({ user, onRemove, onEdit, onToggle }) {
+    useEffect(() => {
+        console.log('When Component is showing up');
+        return () => {
+            console.log('When Component is gone');
+        };
+    }, [user]);
     return (
         <div>
-            <b>{user.username}</b>
-            <span>{user.email}</span>
+            <b
+                style={{
+                    cursor: 'pointer',
+                    color: user.active ? 'green' : 'blue'
+                }}
+                onClick={() => {
+                    onToggle(user.id);
+                }}
+            >
+                {user.username}
+            </b>
+            <span
+                onClick={() => {
+                    onToggle(user.id);
+                }}
+            >
+                {user.email}
+            </span>
             <button
                 onClick={() => {
                     onEdit(user.id);
@@ -21,7 +43,7 @@ function User({ user, onRemove, onEdit }) {
         </div>
     );
 }
-function UserList({ users, onRemove, onEdit }) {
+function UserList({ users, onRemove, onEdit, onToggle }) {
     return (
         <>
             {users.map(user => (
@@ -30,6 +52,7 @@ function UserList({ users, onRemove, onEdit }) {
                     user={user}
                     onRemove={onRemove}
                     onEdit={onEdit}
+                    onToggle={onToggle}
                 />
             ))}
         </>

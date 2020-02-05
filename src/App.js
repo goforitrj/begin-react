@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useMemo } from 'react';
 import UserList from './UserList';
 import CreateUser from './CreateUser';
 
@@ -63,7 +63,13 @@ function App() {
         setUsers(users.filter(user => user.id !== id));
     };
 
-    const count = countActiveUsers(users);
+    // const count = countActiveUsers(users);
+    const count = useMemo(() => {
+        countActiveUsers(users);
+    }, [users]);
+    // only when users are changed countActiveUsers is Called
+    // without useMemo, countActiveUsers is called not only when users are changed but also when inputs are changed
+
     return (
         <div className="App">
             <CreateUser

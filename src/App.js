@@ -37,29 +37,23 @@ function App() {
     const nextId = useRef(4);
 
     const onCreate = useCallback(() => {
-        setUsers(
+        setUsers(users =>
             users.concat({ ...inputs, id: nextId.current++, active: true })
         );
         setInputs({ username: '', email: '' });
-    }, [users, inputs]);
+    }, [inputs]);
 
-    const onRemove = useCallback(
-        id => {
-            setUsers(users.filter(user => user.id !== id));
-        },
-        [users]
-    );
+    const onRemove = useCallback(id => {
+        setUsers(users => users.filter(user => user.id !== id));
+    }, []);
 
-    const onToggle = useCallback(
-        id => {
-            setUsers(
-                users.map(user =>
-                    user.id === id ? { ...user, active: !user.active } : user
-                )
-            );
-        },
-        [users]
-    );
+    const onToggle = useCallback(id => {
+        setUsers(users =>
+            users.map(user =>
+                user.id === id ? { ...user, active: !user.active } : user
+            )
+        );
+    }, []);
 
     const onClickEdit = useCallback(
         id => {

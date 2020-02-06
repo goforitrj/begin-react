@@ -1,6 +1,13 @@
 import React from 'react';
 
-function CreateUser({ username, email, onCreate, onChange }) {
+function CreateUser({
+    username,
+    email,
+    onCreate,
+    onChange,
+    onSaveEdit,
+    selectedId
+}) {
     return (
         <>
             <input
@@ -17,7 +24,11 @@ function CreateUser({ username, email, onCreate, onChange }) {
                 onChange={onChange}
                 placeholder="input email please"
             />
-            <button onClick={onCreate}>ADD</button>
+            {selectedId.current === -1 ? (
+                <button onClick={onCreate}>ADD</button>
+            ) : (
+                <button onClick={onSaveEdit}>Save Edit</button>
+            )}
         </>
     );
 }

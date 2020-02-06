@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-function User({ user, onRemove, onEdit, onToggle }) {
+function User({ user, onRemove, onClickEdit, onToggle }) {
     useEffect(() => {
         console.log('When Component is showing up');
         return () => {
@@ -28,7 +28,7 @@ function User({ user, onRemove, onEdit, onToggle }) {
             </span>
             <button
                 onClick={() => {
-                    onEdit(user.id);
+                    onClickEdit(user.id);
                 }}
             >
                 Edit
@@ -43,7 +43,7 @@ function User({ user, onRemove, onEdit, onToggle }) {
         </div>
     );
 }
-function UserList({ users, onRemove, onEdit, onToggle }) {
+function UserList({ users, onRemove, onClickEdit, onToggle }) {
     return (
         <>
             {users.map(user => (
@@ -51,7 +51,7 @@ function UserList({ users, onRemove, onEdit, onToggle }) {
                     key={user.id}
                     user={user}
                     onRemove={onRemove}
-                    onEdit={onEdit}
+                    onClickEdit={onClickEdit}
                     onToggle={onToggle}
                 />
             ))}

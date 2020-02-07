@@ -21,7 +21,7 @@ function reducer(state, action) {
     }
 }
 
-function UseInputs(initialForm) {
+function useInputs(initialForm) {
     const [state, dispatch] = useReducer(reducer, initialForm);
 
     const onChange = useCallback(e => {
@@ -40,4 +40,4 @@ function UseInputs(initialForm) {
     return [state, onChange, onSelect, reset];
 }
 
-export default UseInputs;
+export default useInputs;

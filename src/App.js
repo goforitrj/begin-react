@@ -1,7 +1,7 @@
 import React, { useRef, useMemo, useCallback, useReducer } from 'react';
 import UserList from './UserList';
 import CreateUser from './CreateUser';
-import UseInputs from './Components/UseInputs';
+import useInputs from './hooks/useInputs';
 
 function countActiveUsers(users) {
     console.log('counting');
@@ -70,7 +70,7 @@ function App() {
 
     const { users } = state;
 
-    const [{ username, email }, onChange, onSelect, reset] = UseInputs({
+    const [{ username, email }, onChange, onSelect, reset] = useInputs({
         username: '',
         email: ''
     });
@@ -123,6 +123,7 @@ function App() {
     }, [username, email, reset]);
 
     const count = useMemo(() => countActiveUsers(users), [users]);
+    const userDispatch = React.createContext(null);
 
     return (
         <div className="App">

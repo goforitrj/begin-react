@@ -33,11 +33,11 @@ function useInputs(initialForm) {
         dispatch({ type: 'SELECT', selectedUser: { username, email } });
     }, []);
 
-    const reset = useCallback(() => {
+    const onReset = useCallback(() => {
         dispatch({ type: 'RESET' });
     }, []);
 
-    return [state, onChange, onSelect, reset];
+    return [state, onChange, onSelect, onReset];
 }
 
 export default useInputs;

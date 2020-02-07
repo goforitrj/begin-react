@@ -63,17 +63,18 @@ function reducer(state, action) {
     }
 }
 
+export const userDispatch = React.createContext(null);
+
 function App() {
+    const [{ username, email }, onChange, onSelect, onReset] = useInputs({
+        username: '',
+        email: ''
+    });
     const [state, dispatch] = useReducer(reducer, initialState);
     const nextId = useRef(4);
     const selectedId = useRef(-1);
 
     const { users } = state;
-
-    const [{ username, email }, onChange, onSelect, reset] = useInputs({
-        username: '',
-        email: ''
-    });
 
     const onCreate = useCallback(() => {
         dispatch({
@@ -84,23 +85,9 @@ function App() {
                 id: nextId.current
             }
         });
-        reset();
+        onReset();
         nextId.current += 1;
-    }, [username, email, reset]);
-
-    const onToggle = useCallback(id => {
-        dispatch({
-            type: 'TOGGLE_USER',
-            id: id
-        });
-    }, []);
-
-    const onRemove = useCallback(id => {
-        dispatch({
-            type: 'REMOVE_USER',
-            id: id
-        });
-    }, []);
+    }, [username, email, onReset]);
 
     const onClickEdit = useCallback(
         id => {
@@ -119,14 +106,13 @@ function App() {
             email
         });
         selectedId.current = -1;
-        reset();
-    }, [username, email, reset]);
+        onReset();
+    }, [username, email, onReset]);
 
     const count = useMemo(() => countActiveUsers(users), [users]);
-    const userDispatch = React.createContext(null);
 
     return (
-        <div className="App">
+        <userDispatch.Provider value={dispatch}>
             <CreateUser
                 username={username}
                 email={email}
@@ -137,12 +123,10 @@ function App() {
             />
             <UserList
                 users={users}
-                onRemove={onRemove}
                 onClickEdit={onClickEdit}
-                onToggle={onToggle}
             />
             <div>현재 활성자 수 : {count}</div>
-        </div>
+        </userDispatch.Provider>
     );
 }
 

@@ -1,5 +1,9 @@
-import React, { useEffect } from 'react';
-function User({ user, onRemove, onClickEdit, onToggle }) {
+import React, { useEffect, useContext } from 'react';
+import { userDispatch } from './App';
+
+function User({ user, onClickEdit }) {
+    const dispatch = useContext(userDispatch);
+
     useEffect(() => {
         console.log('user 값이 설정됨');
         console.log(user);
@@ -16,14 +20,14 @@ function User({ user, onRemove, onClickEdit, onToggle }) {
                     color: user.active ? 'green' : 'blue'
                 }}
                 onClick={() => {
-                    onToggle(user.id);
+                    dispatch({ type: 'TOGGLE_USER', id: user.id });
                 }}
             >
                 {user.username}
             </b>
             <span
                 onClick={() => {
-                    onToggle(user.id);
+                    dispatch({ type: 'TOGGLE_USER', id: user.id });
                 }}
             >
                 {user.email}
@@ -37,7 +41,7 @@ function User({ user, onRemove, onClickEdit, onToggle }) {
             </button>
             <button
                 onClick={() => {
-                    onRemove(user.id);
+                    dispatch({ type: 'REMOVE_USER', id: user.id });
                 }}
             >
                 Delete
@@ -45,17 +49,11 @@ function User({ user, onRemove, onClickEdit, onToggle }) {
         </div>
     );
 }
-function UserList({ users, onRemove, onClickEdit, onToggle }) {
+function UserList({ users, onClickEdit }) {
     return (
         <>
             {users.map(user => (
-                <User
-                    key={user.id}
-                    user={user}
-                    onRemove={onRemove}
-                    onClickEdit={onClickEdit}
-                    onToggle={onToggle}
-                />
+                <User key={user.id} user={user} onClickEdit={onClickEdit} />
             ))}
         </>
     );

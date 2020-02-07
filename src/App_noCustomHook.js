@@ -1,7 +1,6 @@
 import React, { useRef, useMemo, useCallback, useReducer } from 'react';
 import UserList from './UserList';
 import CreateUser from './CreateUser';
-import UseInputs from './Components/UseInputs';
 
 function countActiveUsers(users) {
     console.log('counting');
@@ -9,6 +8,10 @@ function countActiveUsers(users) {
 }
 
 const initialState = {
+    inputs: {
+        username: '',
+        email: ''
+    },
     users: [
         {
             id: 1,
@@ -33,9 +36,18 @@ const initialState = {
 
 function reducer(state, action) {
     switch (action.type) {
+        case 'CHANGE_INPUT':
+            return {
+                ...state,
+                inputs: {
+                    ...state.inputs,
+                    [action.name]: action.value
+                }
+            };
         case 'CREATE_USER':
             return {
                 ...state,
+                inputs: initialState.inputs,
                 users: state.users.concat(action.user)
             };
         case 'TOGGLE_USER':
@@ -49,11 +61,14 @@ function reducer(state, action) {
             };
         case 'REMOVE_USER':
             return {
+                ...state,
                 users: state.users.filter(user => user.id !== action.id)
             };
         case 'SAVE_EDIT':
             const { id, username, email } = action;
             return {
+                ...state,
+                inputs: initialState.inputs,
                 users: state.users.map(user =>
                     user.id === id ? { ...user, username, email } : user
                 )
@@ -69,11 +84,16 @@ function App() {
     const selectedId = useRef(-1);
 
     const { users } = state;
+    const { username, email } = state.inputs;
 
-    const [{ username, email }, onChange, onSelect, reset] = UseInputs({
-        username: '',
-        email: ''
-    });
+    const onChange = useCallback(e => {
+        const { name, value } = e.target;
+        dispatch({
+            type: 'CHANGE_INPUT',
+            name,
+            value
+        });
+    }, []);
 
     const onCreate = useCallback(() => {
         dispatch({
@@ -84,9 +104,8 @@ function App() {
                 id: nextId.current
             }
         });
-        reset();
         nextId.current += 1;
-    }, [username, email, reset]);
+    }, [username, email]);
 
     const onToggle = useCallback(id => {
         dispatch({
@@ -105,10 +124,19 @@ function App() {
     const onClickEdit = useCallback(
         id => {
             selectedId.current = id;
-            const { username, email } = users.find(user => user.id === id);
-            onSelect({ username, email });
+            const selectedUser = users.find(user => user.id === id);
+            dispatch({
+                type: 'CHANGE_INPUT',
+                name: 'username',
+                value: selectedUser.username
+            });
+            dispatch({
+                type: 'CHANGE_INPUT',
+                name: 'email',
+                value: selectedUser.email
+            });
         },
-        [users, onSelect]
+        [users]
     );
 
     const onSaveEdit = useCallback(() => {
@@ -119,8 +147,7 @@ function App() {
             email
         });
         selectedId.current = -1;
-        reset();
-    }, [username, email, reset]);
+    }, [username, email]);
 
     const count = useMemo(() => countActiveUsers(users), [users]);
 

@@ -12,10 +12,6 @@ function reducer(state, action) {
                 acc[current] = '';
                 return acc;
             }, {});
-        case 'SELECT':
-            return {
-                ...action.selectedUser
-            };
         default:
             return state;
     }
@@ -29,15 +25,11 @@ function useInputs(initialForm) {
         dispatch({ type: 'CHANGE', name, value });
     }, []);
 
-    const onSelect = useCallback(({ username, email }) => {
-        dispatch({ type: 'SELECT', selectedUser: { username, email } });
-    }, []);
-
     const onReset = useCallback(() => {
         dispatch({ type: 'RESET' });
     }, []);
 
-    return [state, onChange, onSelect, onReset];
+    return [state, onChange, onReset];
 }
 
 export default useInputs;

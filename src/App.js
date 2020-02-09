@@ -1,7 +1,6 @@
-import React, { useRef, useMemo, useCallback, useReducer } from 'react';
+import React, { useMemo, useReducer } from 'react';
 import UserList from './UserList';
 import CreateUser from './CreateUser';
-import useInputs from './hooks/useInputs';
 
 function countActiveUsers(users) {
     console.log('counting');
@@ -66,65 +65,14 @@ function reducer(state, action) {
 export const userDispatch = React.createContext(null);
 
 function App() {
-    const [{ username, email }, onChange, onSelect, onReset] = useInputs({
-        username: '',
-        email: ''
-    });
     const [state, dispatch] = useReducer(reducer, initialState);
-    const nextId = useRef(4);
-    const selectedId = useRef(-1);
-
     const { users } = state;
-
-    const onCreate = useCallback(() => {
-        dispatch({
-            type: 'CREATE_USER',
-            user: {
-                username,
-                email,
-                id: nextId.current
-            }
-        });
-        onReset();
-        nextId.current += 1;
-    }, [username, email, onReset]);
-
-    const onClickEdit = useCallback(
-        id => {
-            selectedId.current = id;
-            const { username, email } = users.find(user => user.id === id);
-            onSelect({ username, email });
-        },
-        [users, onSelect]
-    );
-
-    const onSaveEdit = useCallback(() => {
-        dispatch({
-            type: 'SAVE_EDIT',
-            id: selectedId.current,
-            username,
-            email
-        });
-        selectedId.current = -1;
-        onReset();
-    }, [username, email, onReset]);
-
     const count = useMemo(() => countActiveUsers(users), [users]);
 
     return (
         <userDispatch.Provider value={dispatch}>
-            <CreateUser
-                username={username}
-                email={email}
-                onCreate={onCreate}
-                onChange={onChange}
-                onSaveEdit={onSaveEdit}
-                selectedId={selectedId}
-            />
-            <UserList
-                users={users}
-                onClickEdit={onClickEdit}
-            />
+            <CreateUser />
+            <UserList users={users} />
             <div>현재 활성자 수 : {count}</div>
         </userDispatch.Provider>
     );

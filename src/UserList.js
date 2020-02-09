@@ -1,7 +1,7 @@
 import React, { useEffect, useContext } from 'react';
 import { userDispatch } from './App';
 
-function User({ user, onClickEdit }) {
+function User({ user }) {
     const dispatch = useContext(userDispatch);
 
     useEffect(() => {
@@ -32,13 +32,6 @@ function User({ user, onClickEdit }) {
             >
                 {user.email}
             </span>
-            <button
-                onClick={() => {
-                    onClickEdit(user.id);
-                }}
-            >
-                Edit
-            </button>
             <button
                 onClick={() => {
                     dispatch({ type: 'REMOVE_USER', id: user.id });

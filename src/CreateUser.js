@@ -1,13 +1,14 @@
-import React from 'react';
+import React, { useRef, useContext } from 'react';
+import { userDispatch } from './App';
+import useInputs from './hooks/useInputs';
 
-function CreateUser({
-    username,
-    email,
-    onCreate,
-    onChange,
-    onSaveEdit,
-    selectedId
-}) {
+function CreateUser() {
+    const [{ username, email }, onChange, onReset] = useInputs({
+        username: '',
+        email: ''
+    });
+    const nextId = useRef(4);
+    const dispatch = useContext(userDispatch);
     return (
         <>
             <input
@@ -24,11 +25,23 @@ function CreateUser({
                 onChange={onChange}
                 placeholder="input email please"
             />
-            {selectedId.current === -1 ? (
-                <button onClick={onCreate}>ADD</button>
-            ) : (
-                <button onClick={onSaveEdit}>Save Edit</button>
-            )}
+
+            <button
+                onClick={() => {
+                    dispatch({
+                        type: 'CREATE_USER',
+                        user: {
+                            username,
+                            email,
+                            id: nextId.current
+                        }
+                    });
+                    onReset();
+                    nextId.current += 1;
+                }}
+            >
+                ADD
+            </button>
         </>
     );
 }

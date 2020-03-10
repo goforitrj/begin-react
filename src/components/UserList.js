@@ -1,5 +1,5 @@
 import React, { useEffect, useContext } from 'react';
-import { userDispatch } from './App';
+import { userDispatch } from '../App';
 
 function User({ user }) {
     const dispatch = useContext(userDispatch);

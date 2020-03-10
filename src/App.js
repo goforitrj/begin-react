@@ -1,6 +1,6 @@
 import React, { useMemo, useReducer } from 'react';
-import UserList from './UserList';
-import CreateUser from './CreateUser';
+import UserList from './components/UserList';
+import CreateUser from './components/CreateUser';
 
 function countActiveUsers(users) {
     console.log('counting');
@@ -49,13 +49,6 @@ function reducer(state, action) {
         case 'REMOVE_USER':
             return {
                 users: state.users.filter(user => user.id !== action.id)
-            };
-        case 'SAVE_EDIT':
-            const { id, username, email } = action;
-            return {
-                users: state.users.map(user =>
-                    user.id === id ? { ...user, username, email } : user
-                )
             };
         default:
             return state;
